@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+
+
+<head>
+
+    <title>大樂透</title>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
+    <style>
+        .wrap {
+            margin: 30px 100px;
+
+        }
+
+        h1 {
+            border-left: 6px solid orange;
+        }
+
+        .main-box {
+            float: left;
+            width: 70%;
+            padding-top: 20px;
+
+        }
+
+        .btn-computer {
+            border: none;
+            float: left;
+            width: 100px;
+            height: 50px;
+            border-radius: 5px;
+            background-color: black;
+            color: #fff;
+        }
+
+        .btn-computer:hover {
+            background-color: orange;
+            color: black;
+        }
+
+        .outset {
+            padding-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .lottery-nums button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            color: maroon;
+            background-color: #fff8dc;
+            font-size: 26px;
+            font-weight: bold;
+            margin: 15px 15px;
+            border: none;
+
+        }
+
+        .lottery-nums button:hover {
+            color: var(--text-black);
+            font-weight: bolder;
+            font-size: 36px;
+            transition: .3s;
+        }
+
+        .lottery-nums .selected {
+            background-color: black;
+            color: #fff;
+        }
+
+        .lottery-nums .highlight {
+            background-color: orange;
+            color: #fff;
+        }
+
+        .lottery-nums .selected.highlight {
+            background-color: red;
+            color: #fff;
+        }
+
+        .group-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            width: 30%;
+            height: 500px;
+            padding: 20px;
+            box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+            border-radius: 30px;
+
+
+        }
+
+        .group-box button {
+            border: none;
+            float: left;
+            width: 100px;
+            height: 50px;
+            border-radius: 5px;
+            margin: 10px;
+
+        }
+
+        .group-box button:hover {
+            background-color: black;
+            color: white;
+        }
+
+        .result-box {
+            width: auto;
+            padding: 20px;
+            font-size: 20px;
+        }
+
+        @media screen and (width<1000px) {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            .wrap {
+                margin: 30px;
+            }
+
+            .main-box {
+                width: 100%;
+            }
+
+            .btn-computer {
+                margin-bottom: 50px;
+            }
+
+            .group-box {
+                width: 90%;
+                margin-top: 50px;
+                height: auto;
+                margin: auto;
+            }
+        }
+        @media (max-width:390px){
+            .wrap {
+                margin: 20px 20px;
+            }
+            .outset,.fw-bold{
+                font-size: 16px;
+            }
+            .lottery-nums button {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                margin: 10px 10px;
+            }
+            .lottery-nums button:hover {
+            color: var(--text-black);
+            font-weight: bolder;
+            font-size: 18px;
+            transition: .4s;
+            }
+            .result-box {
+                padding: 10px 0;
+                font-size: 14px;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+
+            //產生49個按鈕
+            for (let i = 1; i <= 49; i++) {
+                $('div .lottery-nums').append(`<button>${i}</button>`)
+            }
+
+
+            //數字按鈕加入事件，限制只能點擊6次
+            $('.lottery-nums button').click(function () {
+                if ($('.selected').length < 6) {
+                    $(this).addClass('selected');
+                }
+                console.log($('.selected'));
+                let choose = '';
+                for (let r = 0; r < $('.selected').length; r++) {
+                    console.log($('.selected')[r].innerText);
+                    choose += $('.selected')[r].innerText;
+                    if (r < 5) {
+                        choose += ' , ';
+                    }
+                }
+                $('.main-box p').text(`玩家選擇號碼 : ${choose}`);
+            });
+
+
+
+            // 電腦選號
+            $('.btn-computer').click(function () {
+
+                $('.lottery-nums button.selected').removeClass('selected');
+
+                // 樂透1~49 隨機產生6位數字
+                let autonums = [], number;
+
+                while (autonums.length < 6) {
+                    number = parseInt(Math.random() * 49) + 1;
+
+                    if (autonums.indexOf(number) === -1) {
+                        autonums.push(number);
+                    }
+                }
+                console.log(autonums);
+
+                for (i = 0; i < autonums.length; i++) {
+                    $('.lottery-nums button').eq(autonums[i] - 1).addClass('selected');
+                }
+
+                console.log($('.selected'));
+                let choose = '';
+                for (let r = 0; r < $('.selected').length; r++) {
+                    console.log($('.selected')[r].innerText);
+                    choose += $('.selected')[r].innerText;
+                    if (r < 5) {
+                        choose += ' , ';
+                    }
+                }
+                $('.main-box p').text(`玩家選擇號碼 : ${choose}`);
+            });
+
+
+            //重設按鈕，移除全部的button
+            $('.reset').click(function () {
+                $('.lottery-nums button').removeClass('highlight selected');
+                $('p:eq(1)').text('開獎號碼:');
+                $('p:eq(2)').text('中獎號碼:');
+                $('p:eq(3)').text('總計:');
+                $('.main-box p').text('玩家選擇號碼:');
+
+            });
+
+            $('.btn-lottery').click(function () {
+
+                // 先移除開獎的橘色button
+                $('.lottery-nums button.highlight').removeClass('highlight');
+
+                // 尋找自己點擊的綠色button數量
+                let selected_box = $('.selected').length;
+
+                // 如果綠色button的數量小於6跳出警告視窗
+                if (selected_box < 6) {
+                    alert('注意！您尚未選取六位數');
+                    return ture;
+                }
+
+
+                // 樂透1~49 隨機產生6位數字
+                let lottery = [], number;
+
+                while (lottery.length < 6) {
+                    number = parseInt(Math.random() * 49) + 1;
+
+                    if (lottery.indexOf(number) === -1) {
+                        lottery.push(number);
+                    }
+                }
+
+                console.log(lottery);
+
+                //  開出的獎號並在數字button上增加橘色
+                for (i = 0; i < lottery.length; i++) {
+                    $('.lottery-nums button').eq(lottery[i] - 1).addClass('highlight');
+                }
+
+                // 用來儲存開獎出來的樂透號碼
+                let new_numbers = '';
+
+                // 撈出開獎號碼並加上逗號讓數字分開
+                for (let n = 0; n < lottery.length; n++) {
+                    new_numbers += lottery[n];
+                    if (n < 5) {
+                        new_numbers += ' , ';
+                    }
+                }
+
+                // 把開獎號碼印到<span>標籤裡
+                $('p:eq(1)').text(`開獎號碼 : ${new_numbers}`);
+
+                // 找出符合.selected.highlight 有這兩個class代表你中獎
+
+
+
+                let nums = '';
+                for (let s = 0; s < $('.selected.highlight').length; s++) {
+                    console.log($('.selected.highlight')[s].innerText);
+                    nums += $('.selected.highlight')[s].innerText;
+                    if (s < ($('.selected.highlight').length) - 1) {
+                        nums += ' , ';
+                    }
+                }
+                console.log(nums);
+                $('p:eq(2)').text(`中獎號碼 : ${nums}`);
+
+                let amount = $('.selected.highlight').length;
+                $('p:eq(3)').text(`總計 : ${amount}個`);
+            });
+
+
+
+
+        });
+
+    </script>
+</head>
+
+<body>
+
+    <div class="wrap">
+
+
+        <h1>大樂透</h1>
+
+
+        <div class="main-box">
+
+            <h5 class="fw-bold">玩家選擇6個數字</h5>
+
+
+            <div class="lottery-nums"></div>
+            <!-- <button>隱藏</button> -->
+            <p class="outset">玩家選擇號碼</p>
+            <button class="btn-computer">電腦選號</button>
+
+
+        </div>
+
+
+
+
+        <div class="group-box">
+
+
+            <div class="result-box">
+
+                <p class="lottery-result">開獎號碼:</p>
+                <br>
+                <p>中獎號碼:</p>
+                <p class="total">總計:</p>
+
+
+
+
+            </div>
+            <button class="btn-lottery">開獎</button>
+            <button class="reset">重新遊戲</button>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>
